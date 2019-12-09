@@ -40,18 +40,18 @@ export default {
       },
       {
         rel: 'stylesheet',
-        href: '//cdn.staticfile.org/bulma/0.7.5/css/bulma.min.css'
+        href: '//cdn.staticfile.org/bulma/0.8.0/css/bulma.min.css'
       },
       {
         rel: 'stylesheet',
-        href: '//at.alicdn.com/t/font_1142441_rf3iafzqutm.css'
+        href: '//at.alicdn.com/t/font_1142441_yem1kd8hp2n.css'
       }
     ]
   },
   /*
    ** Customize the progress-bar color
    */
-  loading: { color: '#fff' },
+  loading: { color: '#FFB90F' },
   /*
    ** Global CSS
    */
@@ -96,8 +96,8 @@ export default {
   },
 
   proxy: {
-    '/api/': 'http://localhost:8082'
-    // '/api/': 'https://mlog.club'
+    // '/api/': 'http://localhost:8082'
+    '/api/': 'https://mlog.club'
   },
 
   // Doc: https://github.com/shakee93/vue-toasted

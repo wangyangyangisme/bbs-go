@@ -1,7 +1,7 @@
 html,
 body {
   background: #f7f7f7;
-  font-family: "system-ui", "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", STHeiti, sans-serif !important;
+  font-family: "-apple-system", "system-ui", "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", STHeiti, sans-serif !important;
 }
 
 .column {
@@ -25,14 +25,20 @@ body {
 }
 
 // main-container
-$sidebar-width: 190px;
+$sidebar-width: 220px; // 侧边栏宽度
+$sidebar-margin: 10px; // 侧边栏之间的缝隙
+$main-container-width: calc(100% - #{$sidebar-width} - #{$sidebar-margin}); // 主栏目的宽度
+
+.container-wrapper {
+  max-width: 1440px;
+  margin: 0 auto;
+}
 
 .main-container {
   display: flex;
 
   .left-container,
   .right-container {
-    // background: #fff;
     padding: 10px;
     height: 100%;
     box-sizing: border-box;
@@ -46,26 +52,26 @@ $sidebar-width: 190px;
     }
 
     @media screen and (max-width: 768px) {
-      .right-container {
-        display: none;
-      }
-
       .left-container {
         width: 100% !important;
+        margin-right: 0 !important;
+      }
+
+      .right-container {
+        display: none;
       }
     }
 
     .left-container {
-      width: calc(100% - #{$sidebar-width});
+      width: $main-container-width;
       transition: width .2s;
-      margin-right: 10px;
     }
 
     .right-container {
       min-width: $sidebar-width;
       max-width: $sidebar-width;
-      // margin-left: 10px;
       padding: 0px;
+      margin-left: 10px;
     }
   }
 
@@ -76,26 +82,26 @@ $sidebar-width: 190px;
     }
 
     @media screen and (max-width: 768px) {
+      .right-container {
+        width: 100% !important;
+        margin-left: 0 !important;
+      }
+
       .left-container {
         display: none;
       }
+    }
 
-      .right-container {
-        width: 100% !important;
-      }
+    .right-container {
+      width: $main-container-width;
+      transition: width .2s;
     }
 
     .left-container {
       min-width: $sidebar-width;
       max-width: $sidebar-width;
-      // margin-right: 10px;
       padding: 0px;
-    }
-
-    .right-container {
-      width: calc(100% - #{$sidebar-width});
-      transition: width .2s;
-      margin-left: 10px;
+      margin-right: 10px;
     }
   }
 
@@ -133,11 +139,18 @@ $sidebar-width: 190px;
 
 .widget {
   background: #fff;
+  padding: 0 6px;
   // font-size: 13px;
   // padding-left: 8px;
-  padding: 0 6px;
-
   margin-top: 20px;
+
+  &:first-child {
+    margin: 0px;
+  }
+
+  &.has-margin {
+    margin-top: 20px;
+  }
 
   &.no-margin {
     margin: 0px;
@@ -246,29 +259,6 @@ div.avatar {
     }
   }
 }
-
-.navbar .msgcount {
-  text-align: center;
-  vertical-align: middle;
-  height: 25px;
-  width: 25px;
-  margin: 0px;
-  padding: 1px;
-  background: #e50000;
-  border-radius: 50%;
-  font-size: 15px;
-  font-weight: 900;
-  color: #fff;
-  animation: msgnotice 1s 3; // infinite 可以指定循环
-
-  @keyframes msgnotice {
-    50% {
-      background: transparent;
-      color: transparent;
-    }
-  }
-}
-
 
 .toc {
   position: relative;

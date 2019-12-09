@@ -167,7 +167,7 @@ export default {
   },
   computed: {
     btnName() {
-      return this.sending ? '正在发表...' : '发表 (ctrl+enter)'
+      return this.sending ? '正在发表...' : '发表 (Ctrl/Cmd + Enter)'
     },
     user() {
       return this.$store.state.user.current
@@ -214,7 +214,10 @@ export default {
         utils.toSignin()
       }
       this.quote = quote
-      this.$refs.comments.scrollIntoView({ block: 'start', behavior: 'smooth' })
+      this.$refs.commentEditor.scrollIntoView({
+        block: 'start',
+        behavior: 'smooth'
+      })
     },
     cancelReply() {
       this.quote = null

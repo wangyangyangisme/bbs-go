@@ -26,7 +26,6 @@ func (this *WxbotApi) Publish(wxArticle *WxArticle) (*model.Article, error) {
 	}
 
 	userId, _ := this.initUser(wxArticle)
-	categoryId := this.initCategory(simple.DB(), wxArticle)
 	tags := this.initTags(simple.DB(), wxArticle)
 	summary := wxArticle.Summary
 	if simple.RuneLen(summary) == 0 {
@@ -34,7 +33,7 @@ func (this *WxbotApi) Publish(wxArticle *WxArticle) (*model.Article, error) {
 	}
 
 	return services.ArticleService.Publish(userId, wxArticle.Title, summary,
-		wxArticle.HtmlContent, model.ContentTypeHtml, categoryId, tags, wxArticle.Url, true)
+		wxArticle.HtmlContent, model.ContentTypeHtml, tags, wxArticle.Url, true)
 }
 
 func (this *WxbotApi) initUser(article *WxArticle) (int64, error) {
@@ -67,17 +66,6 @@ func (this *WxbotApi) initUser(article *WxArticle) (int64, error) {
 	}
 }
 
-func (this *WxbotApi) initCategory(db *gorm.DB, wxArticle *WxArticle) int64 {
-	if len(wxArticle.Category) == 0 {
-		return 0
-	}
-	cat, _ := services.CategoryService.GetOrCreate(wxArticle.Category)
-	if cat != nil {
-		return cat.Id
-	}
-	return 0
-}
-
 func (this *WxbotApi) initTags(db *gorm.DB, wxArticle *WxArticle) []string {
 	var tagNames []string
 
@@ -107,6 +95,7 @@ func (this *WxbotApi) initTags(db *gorm.DB, wxArticle *WxArticle) []string {
 	return tagNames
 }
 
+// WxArticle 微信文章
 type WxArticle struct {
 	Id          int64  `json:"id"`          // 编号
 	Title       string `json:"title"`       // 标题

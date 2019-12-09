@@ -1,6 +1,6 @@
 <template>
   <section class="main">
-    <div class="container main-container left-main">
+    <div class="container-wrapper main-container left-main">
       <div class="left-container">
         <article class="article-item article-detail">
           <div class="article-header">
@@ -30,14 +30,6 @@
                   <time itemprop="datePublished">{{
                     article.createTime | prettyDate
                   }}</time>
-                </span>
-
-                <span v-if="article.category" class="article-meta-item">
-                  <span class="article-tag tag">
-                    <a :href="'/articles/cat/' + article.category.categoryId">{{
-                      article.category.categoryName
-                    }}</a>
-                  </span>
                 </span>
 
                 <span
@@ -174,7 +166,7 @@
           ;(adsbygoogle = window.adsbygoogle || []).push({})
         </script>
 
-        <div ref="toc" v-if="article.toc" class="widget no-margin no-bg toc">
+        <div ref="toc" v-if="article.toc" class="widget no-bg toc">
           <div class="widget-header">目录</div>
           <div v-html="article.toc" class="widget-content" />
         </div>

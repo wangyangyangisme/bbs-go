@@ -1,11 +1,11 @@
 <template>
   <nav
     ref="nav"
-    class="navbar is-white is-fixed-top"
+    class="navbar is-dark is-fixed-top"
     role="navigation"
     aria-label="main navigation"
   >
-    <div class="container">
+    <div class="container nav-container">
       <div class="navbar-brand">
         <a href="/" class="navbar-item">
           <img src="~/assets/images/logo.png" />
@@ -55,17 +55,7 @@
             </form>
           </div>
 
-          <!--
-          <div class="navbar-item">
-            <div class="buttons">
-              <a class="button is-success" href="/topic/create">
-                <i class="iconfont icon-topic">
-                  <strong>发帖/提问</strong>
-                </i>
-              </a>
-            </div>
-          </div>
-          -->
+          <msg-notice />
 
           <div v-if="user" class="navbar-item has-dropdown is-hoverable">
             <a :href="'/user/' + user.id" class="navbar-link">
@@ -73,36 +63,32 @@
             </a>
             <div class="navbar-dropdown">
               <a class="navbar-item" href="/topic/create">
-                <i class="iconfont icon-topic" />&nbsp;发帖/提问
+                <i class="iconfont icon-topic" />&nbsp;发帖
               </a>
-              <a class="navbar-item" href="/article/create">
-                <i class="iconfont icon-publish" />&nbsp;发表文章
-              </a>
-              <a class="navbar-item" href="/user/messages">
-                <i class="iconfont icon-message" />&nbsp;消息
-              </a>
+              <!--
+            <a class="navbar-item" href="/article/create">
+              <i class="iconfont icon-publish" />&nbsp;发表文章
+            </a>
+            <a class="navbar-item" href="/user/messages">
+              <i class="iconfont icon-message" />&nbsp;消息
+            </a>
+            -->
               <a class="navbar-item" href="/user/favorites">
                 <i class="iconfont icon-favorites" />&nbsp;收藏
               </a>
               <a class="navbar-item" href="/user/settings">
-                <i class="iconfont icon-username" />&nbsp;编辑资料
+                <i class="iconfont icon-username" />&nbsp;个人资料
               </a>
               <a @click="signout" class="navbar-item">
                 <i class="iconfont icon-log-out" />&nbsp;退出登录
               </a>
             </div>
           </div>
-          <div v-if="!user" class="navbar-item">
+          <div v-else class="navbar-item">
             <div class="buttons">
               <github-login />
               <qq-login />
             </div>
-          </div>
-
-          <div v-if="user && msgcount > 0" class="navbar-item">
-            <a :href="'/user/messages'" class="msgcount">{{
-              msgcount > 9 ? '9+' : msgcount
-            }}</a>
           </div>
         </div>
       </div>
@@ -114,11 +100,11 @@
 import utils from '~/common/utils'
 import GithubLogin from '~/components/GithubLogin'
 import QqLogin from '~/components/QqLogin'
+import MsgNotice from '~/components/MsgNotice'
 export default {
-  components: { GithubLogin, QqLogin },
+  components: { GithubLogin, QqLogin, MsgNotice },
   data() {
     return {
-      msgcount: 0,
       navbarActive: false
     }
   },
@@ -132,16 +118,11 @@ export default {
   },
   mounted() {
     window.addEventListener('scroll', this.handleScroll)
-    this.getMsgcount()
   },
   methods: {
-    async getMsgcount() {
-      this.msgcount = await this.$axios.get('/api/user/msgcount')
-    },
     async signout() {
       try {
         await this.$store.dispatch('user/signout')
-        this.msgcount = 0
         utils.linkTo('/')
       } catch (e) {
         console.error(e)
@@ -164,6 +145,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.nav-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0px 20px;
+}
 .searchFormDiv {
   @media screen and (max-width: 768px) {
     & {
@@ -173,7 +159,6 @@ export default {
 
   #searchForm {
     .input {
-      // box-shadow: inset 0 1px 2px rgba(10,10,10,.1);
       box-shadow: none;
       border-radius: 2px;
       background-color: #fff;

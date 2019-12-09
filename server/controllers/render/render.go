@@ -24,7 +24,7 @@ func BuildUserDefaultIfNull(id int64) *model.UserInfo {
 		user = &model.User{}
 		user.Id = id
 		user.Username = simple.SqlNullString(strconv.FormatInt(id, 10))
-		user.Avatar = avatar.GetDefaultAvatar(id)
+		user.Avatar = avatar.DefaultAvatar
 		user.CreateTime = simple.NowTimestamp()
 	}
 	return BuildUser(user)
@@ -44,7 +44,7 @@ func BuildUser(user *model.User) *model.UserInfo {
 	}
 	a := user.Avatar
 	if len(a) == 0 {
-		a = avatar.GetDefaultAvatar(user.Id)
+		a = avatar.DefaultAvatar
 	}
 	roles := strings.Split(user.Roles, ",")
 	return &model.UserInfo{
@@ -75,13 +75,6 @@ func BuildUsers(users []model.User) []model.UserInfo {
 	return responses
 }
 
-func BuildCategory(category *model.Category) *model.CategoryResponse {
-	if category == nil {
-		return nil
-	}
-	return &model.CategoryResponse{CategoryId: category.Id, CategoryName: category.Name}
-}
-
 func BuildArticle(article *model.Article) *model.ArticleResponse {
 	if article == nil {
 		return nil
@@ -96,11 +89,6 @@ func BuildArticle(article *model.Article) *model.ArticleResponse {
 	rsp.CreateTime = article.CreateTime
 
 	rsp.User = BuildUserDefaultIfNull(article.UserId)
-
-	if article.CategoryId > 0 {
-		category := cache.CategoryCache.Get(article.CategoryId)
-		rsp.Category = BuildCategory(category)
-	}
 
 	tagIds := cache.ArticleTagCache.Get(article.Id)
 	tags := cache.TagCache.GetList(tagIds)
@@ -148,11 +136,6 @@ func BuildSimpleArticle(article *model.Article) *model.ArticleSimpleResponse {
 	rsp.CreateTime = article.CreateTime
 
 	rsp.User = BuildUserDefaultIfNull(article.UserId)
-
-	if article.CategoryId > 0 {
-		category := cache.CategoryCache.Get(article.CategoryId)
-		rsp.Category = BuildCategory(category)
-	}
 
 	tagIds := cache.ArticleTagCache.Get(article.Id)
 	tags := cache.TagCache.GetList(tagIds)
@@ -279,7 +262,7 @@ func BuildProject(project *model.Project) *model.ProjectResponse {
 	return rsp
 }
 
-func BuildSimpleProjects(projects []model.Project) [] model.ProjectSimpleResponse {
+func BuildSimpleProjects(projects []model.Project) []model.ProjectSimpleResponse {
 	if projects == nil || len(projects) == 0 {
 		return nil
 	}
@@ -439,7 +422,7 @@ func BuildMessage(message *model.Message) *model.MessageResponse {
 	from := BuildUserDefaultIfNull(message.FromId)
 	if message.FromId <= 0 {
 		from.Nickname = "系统通知"
-		from.Avatar = avatar.DefaultAvatars[0]
+		from.Avatar = avatar.DefaultAvatar
 	}
 	return &model.MessageResponse{
 		MessageId:    message.Id,

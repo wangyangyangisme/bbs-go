@@ -9,6 +9,7 @@ import (
 
 	"github.com/emirpasic/gods/sets/hashset"
 
+	"github.com/mlogclub/bbs-go/common/baiduseo"
 	"github.com/mlogclub/bbs-go/common/config"
 	"github.com/mlogclub/bbs-go/common/urls"
 	"github.com/mlogclub/bbs-go/repositories"
@@ -28,9 +29,7 @@ type ScanArticleCallback func(articles []model.Article) bool
 var ArticleService = newArticleService()
 
 func newArticleService() *articleService {
-	return &articleService{
-
-	}
+	return &articleService{}
 }
 
 type articleService struct {
@@ -78,8 +77,6 @@ func (this *articleService) UpdateColumn(id int64, name string, value interface{
 func (this *articleService) Delete(id int64) error {
 	err := repositories.ArticleRepository.UpdateColumn(simple.DB(), id, "status", model.ArticleStatusDeleted)
 	if err == nil {
-		// 删掉专栏文章
-		SubjectContentService.DeleteByEntity(model.EntityTypeArticle, id)
 		// 删掉标签文章
 		ArticleTagService.DeleteByArticleId(id)
 	}
@@ -140,25 +137,9 @@ func (this *articleService) GetTagArticles(tagId int64, cursor int64) (articles 
 	return
 }
 
-// 分类文章列表
-func (this *articleService) GetCategoryArticles(categoryId int64, cursor int64) (articles []model.Article, nextCursor int64) {
-	cnd := simple.NewSqlCnd().Eq("category_id", categoryId).Eq("status", model.ArticleStatusPublished).Limit(20).Desc("id")
-	if cursor > 0 {
-		cnd.Lt("id", cursor)
-	}
-	articles = repositories.ArticleRepository.Find(simple.DB(), cnd)
-	if len(articles) > 0 {
-		nextCursor = articles[len(articles)-1].Id
-	} else {
-		nextCursor = cursor
-	}
-	return
-}
-
 // 发布文章
-func (this *articleService) Publish(userId int64, title, summary, content, contentType string, categoryId int64,
-	tags []string, sourceUrl string, share bool) (article *model.Article, err error) {
-
+func (this *articleService) Publish(userId int64, title, summary, content, contentType string, tags []string,
+	sourceUrl string, share bool) (article *model.Article, err error) {
 	title = strings.TrimSpace(title)
 	summary = strings.TrimSpace(summary)
 	content = strings.TrimSpace(content)
@@ -184,7 +165,6 @@ func (this *articleService) Publish(userId int64, title, summary, content, conte
 		Summary:     summary,
 		Content:     content,
 		ContentType: contentType,
-		CategoryId:  categoryId,
 		Status:      model.ArticleStatusPublished,
 		Share:       share,
 		SourceUrl:   sourceUrl,
@@ -203,7 +183,7 @@ func (this *articleService) Publish(userId int64, title, summary, content, conte
 	})
 
 	if err == nil {
-		SubjectContentService.AnalyzeArticle(article)
+		baiduseo.PushUrl(urls.ArticleUrl(article.Id))
 	}
 	return
 }

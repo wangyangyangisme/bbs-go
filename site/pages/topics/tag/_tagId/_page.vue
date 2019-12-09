@@ -1,26 +1,29 @@
 <template>
   <section class="main">
-    <div class="container main-container right-main">
-      <bbs-left :current-tag-id="tag.tagId" />
-      <div class="right-container">
-        <topic-list :topics="topicsPage.results" :show-ad="false" />
+    <div class="container-wrapper main-container left-main">
+      <div class="left-container">
+        <topics-nav :current-tag-id="tag.tagId" />
+        <topic-list :topics="topicsPage.results" :show-ad="true" />
         <pagination
           :page="topicsPage.page"
           :url-prefix="'/topics/tag/' + tag.tagId + '/'"
         />
       </div>
+      <topic-side :current-tag-id="tag.tagId" />
     </div>
   </section>
 </template>
 
 <script>
-import BbsLeft from '~/components/BbsLeft'
+import TopicSide from '~/components/TopicSide'
+import TopicsNav from '~/components/TopicsNav'
 import TopicList from '~/components/TopicList'
 import Pagination from '~/components/Pagination'
 
 export default {
   components: {
-    BbsLeft,
+    TopicSide,
+    TopicsNav,
     TopicList,
     Pagination
   },

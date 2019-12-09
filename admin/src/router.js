@@ -38,14 +38,6 @@ export default new Router({
           }
         },
         {
-          path: '/category/index',
-          component: () => import('@/views/category/Index.vue'),
-          meta: {
-            title: '分类',
-            icon: 'iconfont icon-category'
-          }
-        },
-        {
           path: '/tag/index',
           component: () => import('@/views/tag/Index.vue'),
           meta: {
@@ -75,33 +67,6 @@ export default new Router({
           meta: {
             title: '配置',
             icon: 'iconfont icon-setting'
-          }
-        }
-      ]
-    },
-
-    {
-      path: '2',
-      component: Home,
-      meta: {
-        title: '专栏管理',
-        icon: 'iconfont icon-article'
-      },
-      children: [
-        {
-          path: '/subject/index',
-          component: () => import('@/views/subject/Index.vue'),
-          meta: {
-            title: '专栏',
-            icon: 'iconfont icon-article'
-          }
-        },
-        {
-          path: '/subject-content/index',
-          component: () => import('@/views/subject-content/Index.vue'),
-          meta: {
-            title: '专栏内容',
-            icon: 'iconfont icon-topic'
           }
         }
       ]

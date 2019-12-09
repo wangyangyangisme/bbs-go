@@ -1,13 +1,7 @@
 <template>
   <ul class="article-list">
     <li v-for="(article, index) in articles" :key="article.articleId">
-      <div
-        v-if="
-          showAd &&
-            ((articles.length < 3 && index === 1) ||
-              (index !== 0 && index % 5 === 0))
-        "
-      >
+      <div v-if="showAd && index !== 0 && index % 5 === 0">
         <ins
           class="adsbygoogle"
           style="display:block"
@@ -38,14 +32,6 @@
             <time itemprop="datePublished">{{
               article.createTime | prettyDate
             }}</time>
-          </span>
-
-          <span v-if="article.category" class="article-meta-item">
-            <span class="article-tag tag">
-              <a :href="'/articles/cat/' + article.category.categoryId">{{
-                article.category.categoryName
-              }}</a>
-            </span>
           </span>
 
           <span

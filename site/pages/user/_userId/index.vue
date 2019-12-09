@@ -1,25 +1,25 @@
 <template>
   <section class="main">
-    <div class="container">
+    <div class="container-wrapper">
       <div class="columns">
         <div class="column is-9">
           <div class="main-body">
             <div class="tabs">
               <ul>
-                <li :class="{ 'is-active': activeTab === 'topics' }">
-                  <a :href="'/user/' + user.id + '?tab=topics'">
-                    <span class="icon is-small">
-                      <i class="iconfont icon-topic" aria-hidden="true" />
-                    </span>
-                    <span>话题</span>
-                  </a>
-                </li>
                 <li :class="{ 'is-active': activeTab === 'articles' }">
                   <a :href="'/user/' + user.id + '?tab=articles'">
                     <span class="icon is-small">
                       <i class="iconfont icon-article" aria-hidden="true" />
                     </span>
                     <span>文章</span>
+                  </a>
+                </li>
+                <li :class="{ 'is-active': activeTab === 'topics' }">
+                  <a :href="'/user/' + user.id + '?tab=topics'">
+                    <span class="icon is-small">
+                      <i class="iconfont icon-topic" aria-hidden="true" />
+                    </span>
+                    <span>话题</span>
                   </a>
                 </li>
               </ul>
@@ -75,7 +75,7 @@ import TopicList from '~/components/TopicList'
 import ArticleList from '~/components/ArticleList'
 import UserCenterSidebar from '~/components/UserCenterSidebar'
 
-const defaultTab = 'topics'
+const defaultTab = 'articles'
 
 export default {
   components: {
